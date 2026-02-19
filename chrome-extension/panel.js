@@ -38,8 +38,8 @@ async function fetchData() {
   } catch (err) {
     console.error('Fetch error:', err);
     showError(
-      'Cannot connect to the local API server',
-      'Make sure your server is running at http://localhost:8787'
+      'Server error or connection failed',
+      err.message.includes('HTTP') ? `The server returned an error: ${err.message}` : 'Please check if the API server is online.'
     );
   }
 }

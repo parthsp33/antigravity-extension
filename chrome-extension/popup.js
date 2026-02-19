@@ -67,7 +67,9 @@ async function fetchData() {
     if (errorEl) {
       errorEl.style.display = 'block';
       document.getElementById('error-message').textContent = 'Server connection failed';
-      document.getElementById('error-hint').textContent = 'Make sure npm start is running';
+      document.getElementById('error-hint').textContent = err.message.includes('HTTP')
+        ? `Server error: ${err.message}`
+        : 'Please check your internet connection or if the API is online.';
     }
   }
 }
