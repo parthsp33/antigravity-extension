@@ -1,4 +1,4 @@
-const API_URL = 'https://antigravity-extension.onrender.com/usage';
+const API_URL = 'https://antigravity-extension-production.up.railway.app/usage';
 let autoRefreshInterval = null;
 
 document.addEventListener('DOMContentLoaded', () => {

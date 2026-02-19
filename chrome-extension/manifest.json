@@ -7,7 +7,7 @@
     "sidePanel"
   ],
   "host_permissions": [
-    "https://antigravity-extension.onrender.com/*"
+    "https://antigravity-extension-production.up.railway.app/*"
   ],
   "action": {
     "default_popup": "popup.html",
