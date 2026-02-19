@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8787/usage';
+const API_URL = 'https://antigravity-extension.onrender.com/usage';
 let autoRefreshInterval = null;
 
 document.addEventListener('DOMContentLoaded', () => {

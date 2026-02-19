@@ -3,8 +3,12 @@
   "name": "Antigravity Usage Monitor",
   "version": "1.0.0",
   "description": "Monitor antigravity usage directly from your browser",
-  "permissions": ["sidePanel"],
-  "host_permissions": ["http://localhost:8787/*"],
+  "permissions": [
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://antigravity-extension.onrender.com/*"
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
