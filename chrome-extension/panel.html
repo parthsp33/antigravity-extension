@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+  <div class="panel-container">
+    <div class="panel-header">
+      <h1>Antigravity Usage Monitor</h1>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button id="refresh" class="btn-icon" title="Refresh data">🔄</button>
+        <button id="closePanel" class="btn-close" title="Close panel">✕</button>
+      </div>
+    </div>
+    
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading usage data...</p>
+    </div>
+
+    <div id="content" class="content dark" style="display: none;">
+      <div id="data-container"></div>
+      
+      <div class="panel-settings">
+        <label>
+          <input type="checkbox" id="autoRefresh"> Auto-refresh every 30 seconds
+        </label>
+        <div class="refresh-status">
+          <small id="lastUpdate">Last updated at --:--:--</small>
+        </div>
+      </div>
+    </div>
+
+    <div id="error" class="error dark" style="display: none;">
+      <h2>⚠️ Connection Error</h2>
+      <p id="error-message"></p>
+      <p class="error-hint" id="error-hint"></p>
+      <button id="retry" class="btn-secondary">Try Again</button>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>
+
+

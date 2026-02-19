@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+  <div class="container">
+    <div class="header dark">
+      <h1>Antigravity Usage</h1>
+      <button id="closeBtn" class="btn-close">✕</button>
+    </div>
+    
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+
+    <div id="content" class="content dark" style="display: none;">
+      <div id="data-container"></div>
+      
+      <div class="toggle-section">
+        <label class="toggle-label">
+          <input type="checkbox" id="sidePanel" class="toggle-input">
+          <span class="toggle-switch"></span>
+          <span class="toggle-text">Open in side panel</span>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="refresh" class="btn-secondary">Refresh</button>
+        <button id="openSettings" class="btn-secondary">Settings</button>
+      </div>
+    </div>
+
+    <div id="error" class="error dark" style="display: none;">
+      <p>❌ <span id="error-message"></span></p>
+      <p class="error-hint" id="error-hint"></p>
+      <button id="retry" class="btn-secondary">Try Again</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
