@@ -14,7 +14,7 @@ app.get("/health", (req, res) => {
 
 app.get("/usage", async (req, res) => {
   try {
-    const { stdout, stderr } = await execFileAsync("antigravity-usage", ["--json"]);
+    const { stdout, stderr } = await execFileAsync("npx", ["antigravity-usage", "--json"]);
 
     const output = stdout.trim();
 
