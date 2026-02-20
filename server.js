@@ -40,7 +40,12 @@ async function initAuthentication() {
 
     // Write tokens.json
     await fs.writeFile(tokenPath, tokenJson, 'utf8');
-    console.log(`✅ Authentication initialized for ${email} at ${tokenPath}`);
+
+    // Also write config.json to set the default account
+    const configPath = path.join(configDir, "config.json");
+    await fs.writeFile(configPath, JSON.stringify({ currentAccount: email }), 'utf8');
+
+    console.log(`✅ Authentication initialized for ${email}`);
   } catch (err) {
     console.error("❌ Failed to initialize authentication:", err.message);
   }
