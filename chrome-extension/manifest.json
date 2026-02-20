@@ -7,6 +7,7 @@
     "sidePanel"
   ],
   "host_permissions": [
+    "http://localhost:8787/*",
     "https://antigravity-extension-production.up.railway.app/*"
   ],
   "action": {

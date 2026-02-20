@@ -1,4 +1,4 @@
-const API_URL = 'https://antigravity-extension-production.up.railway.app/usage';
+const API_URL = 'http://localhost:8787/usage';
 
 // Automatically open side panel when popup is clicked
 document.addEventListener('DOMContentLoaded', async () => {
