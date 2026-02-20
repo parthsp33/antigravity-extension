@@ -69,6 +69,19 @@ app.get("/health", (req, res) => {
   res.json({ ok: true });
 });
 
+app.get("/doctor", async (req, res) => {
+  try {
+    const home = os.homedir();
+    const xdgConfig = path.join(home, ".config");
+    const { stdout, stderr } = await execFileAsync("npx", ["antigravity-usage", "doctor"], {
+      env: { ...process.env, HOME: home, XDG_CONFIG_HOME: xdgConfig }
+    });
+    res.json({ ok: true, stdout, stderr });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message, stderr: err.stderr });
+  }
+});
+
 app.get("/usage", async (req, res) => {
   try {
     // Force HOME and XDG_CONFIG_HOME for the sub-process
