@@ -8,17 +8,23 @@ import fs from "node:fs/promises";
 
 const execFileAsync = promisify(execFile);
 
-// Helper to get platform-specific config directory
-function getConfigDir() {
+// Helper to get platform-specific config directories
+function getConfigDirs() {
   const home = os.homedir();
+  const dirs = [];
   switch (process.platform) {
     case "win32":
-      return path.join(process.env.APPDATA || path.join(home, "AppData", "Roaming"), "antigravity-usage");
+      dirs.push(path.join(process.env.APPDATA || path.join(home, "AppData", "Roaming"), "antigravity-usage"));
+      break;
     case "darwin":
-      return path.join(home, "Library", "Application Support", "antigravity-usage");
+      dirs.push(path.join(home, "Library", "Application Support", "antigravity-usage"));
+      break;
     default: // linux and others
-      return path.join(process.env.XDG_CONFIG_HOME || path.join(home, ".config"), "antigravity-usage");
+      dirs.push(path.join(process.env.XDG_CONFIG_HOME || path.join(home, ".config"), "antigravity-usage"));
+      dirs.push(path.join(home, ".antigravity-usage"));
+      break;
   }
+  return dirs;
 }
 
 // Automatically setup authentication from environment variables
@@ -32,20 +38,22 @@ async function initAuthentication() {
   }
 
   try {
-    const configDir = getConfigDir();
-    const tokenPath = path.join(configDir, "accounts", email, "tokens.json");
+    const configDirs = getConfigDirs();
+    for (const configDir of configDirs) {
+      const tokenPath = path.join(configDir, "accounts", email, "tokens.json");
+      const configPath = path.join(configDir, "config.json");
 
-    // Ensure directory exists
-    await fs.mkdir(path.dirname(tokenPath), { recursive: true });
+      // Ensure directory exists
+      await fs.mkdir(path.dirname(tokenPath), { recursive: true });
 
-    // Write tokens.json
-    await fs.writeFile(tokenPath, tokenJson, 'utf8');
+      // Write tokens.json
+      await fs.writeFile(tokenPath, tokenJson, 'utf8');
 
-    // Also write config.json to set the default account
-    const configPath = path.join(configDir, "config.json");
-    await fs.writeFile(configPath, JSON.stringify({ currentAccount: email }), 'utf8');
+      // Write config.json
+      await fs.writeFile(configPath, JSON.stringify({ currentAccount: email }), 'utf8');
 
-    console.log(`✅ Authentication initialized for ${email}`);
+      console.log(`✅ Authentication initialized for ${email} in ${configDir}`);
+    }
   } catch (err) {
     console.error("❌ Failed to initialize authentication:", err.message);
   }
@@ -63,7 +71,17 @@ app.get("/health", (req, res) => {
 
 app.get("/usage", async (req, res) => {
   try {
-    const { stdout, stderr } = await execFileAsync("npx", ["antigravity-usage", "--json"]);
+    // Force HOME and XDG_CONFIG_HOME for the sub-process
+    const home = os.homedir();
+    const xdgConfig = path.join(home, ".config");
+
+    const { stdout, stderr } = await execFileAsync("npx", ["antigravity-usage", "--json"], {
+      env: {
+        ...process.env,
+        HOME: home,
+        XDG_CONFIG_HOME: xdgConfig
+      }
+    });
 
     const output = stdout.trim();
 
@@ -82,18 +100,15 @@ app.get("/usage", async (req, res) => {
       time: new Date().toISOString(),
     });
   } catch (err) {
-    const configDir = getConfigDir();
+    const home = os.homedir();
     res.status(500).json({
       ok: false,
       error: err.message,
       debug: {
         platform: process.platform,
-        home: os.homedir(),
-        configDir: configDir,
-        envPresent: {
-          email: !!process.env.ANTIGRAVITY_EMAIL,
-          token: !!process.env.ANTIGRAVITY_TOKEN_JSON
-        }
+        home: home,
+        envEmail: !!process.env.ANTIGRAVITY_EMAIL,
+        envToken: !!process.env.ANTIGRAVITY_TOKEN_JSON
       },
       fix: "Ensure ANTIGRAVITY_EMAIL and ANTIGRAVITY_TOKEN_JSON are set in dashboard."
     });
