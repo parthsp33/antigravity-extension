@@ -77,10 +77,20 @@ app.get("/usage", async (req, res) => {
       time: new Date().toISOString(),
     });
   } catch (err) {
+    const configDir = getConfigDir();
     res.status(500).json({
       ok: false,
       error: err.message,
-      fix: "Run antigravity-usage in terminal first. If it works there, Node will work too."
+      debug: {
+        platform: process.platform,
+        home: os.homedir(),
+        configDir: configDir,
+        envPresent: {
+          email: !!process.env.ANTIGRAVITY_EMAIL,
+          token: !!process.env.ANTIGRAVITY_TOKEN_JSON
+        }
+      },
+      fix: "Ensure ANTIGRAVITY_EMAIL and ANTIGRAVITY_TOKEN_JSON are set in dashboard."
     });
   }
 });
