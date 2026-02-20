@@ -40,11 +40,12 @@ async function initAuthentication() {
   try {
     const configDirs = getConfigDirs();
     for (const configDir of configDirs) {
-      const tokenPath = path.join(configDir, "accounts", email, "tokens.json");
+      // Write directly to configDir, as the remote CLI expects it there
+      const tokenPath = path.join(configDir, "tokens.json");
       const configPath = path.join(configDir, "config.json");
 
       // Ensure directory exists
-      await fs.mkdir(path.dirname(tokenPath), { recursive: true });
+      await fs.mkdir(configDir, { recursive: true });
 
       // Write tokens.json
       await fs.writeFile(tokenPath, tokenJson, 'utf8');
